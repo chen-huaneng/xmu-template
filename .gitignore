@@ -1,0 +1,40 @@
+# 忽略 PDF 编译的中间文件
+*.synctex.gz
+*.synctex(busy)
+
+# 忽略编译过程中生成的文件
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.lol
+*.loa
+*.glo
+*.gls
+*.ist
+*.xdy
+*.acn
+*.snm
+*.nav
+*.vrb
+
+# 忽略临时文件
+*~
+
+# 忽略某些编辑器的临时文件
+.DS_Store
+Thumbs.db
+
+# 忽略编译生成的文档信息文件
+*.fdb_latexmk
+*.fls
+
+# 忽略编译生成的日志文件
+*.log~
+
+# 忽略编译生成的辅助文件
+*.aux~

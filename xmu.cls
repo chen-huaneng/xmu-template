@@ -1,10 +1,5 @@
-\ProvidesClass{xmu}[XMU Undergraduates Thesis Template]
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%    XMU Undergraduates Thesis Template    %%%%%%%%
-%%%%%%%%             Made by: F5Soft              %%%%%%%%
-%%%%%%%%  https://github.com/F5Soft/xmu-template  %%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{xmu}[2024-12-04 XMU Undergraduates Thesis Template]
 
 \PassOptionsToPackage{AutoFakeBold}{xeCJK}
 \LoadClass{ctexbook}
