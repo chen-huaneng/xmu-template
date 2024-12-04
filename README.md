@@ -1,3 +1,3 @@
 # XMU Thesis Template
 
-本项目基于[F5Soft/xmu-template](https://github.com/F5Soft/xmu-template?tab=readme-ov-file)项目的论文模板进行改进。
+本项目主要用于厦门大学本科主修毕业论文的 $\LaTeX$ 模板。
