@@ -7,7 +7,7 @@
 %%%%%%%% 宏包 %%%%%%%%
 
 % 页面尺寸
-\RequirePackage[a4paper,top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm,head=1.57cm,foot=1.5cm]{geometry}
+\RequirePackage[a4paper,top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm,head=1.5cm,foot=1.75cm]{geometry}
 % 自定义页眉页脚
 \RequirePackage{fancyhdr}
 % 自定义章节标题
@@ -59,11 +59,15 @@
 
 %%%%%%%% 字体、段落 %%%%%%%%
 
+% 设置粗体的粗细程度
+\xeCJKsetup{EmboldenFactor=3}
+
 % 采用 Windows 字体文件以兼容 macOS 和 Linux
 \setCJKfamilyfont{simsun}{simsun.ttc}
 \setCJKfamilyfont{simhei}{simhei.ttf}
 \setCJKfamilyfont{simkai}{simkai.ttf}
 
+% 定义新的字体调用命令
 \renewcommand{\songti}{\CJKfamily{simsun}} % 宋体
 \renewcommand{\heiti}{\CJKfamily{simhei}}  % 黑体
 \renewcommand{\kaishu}{\CJKfamily{simkai}} % 楷体
@@ -71,6 +75,7 @@
 % 英文默认字体
 \setmainfont{Times New Roman}
 \setsansfont{Arial}
+
 % 中文默认字体
 \setCJKmainfont[BoldFont=simhei.ttf,ItalicFont=simkai.ttf]{simsun.ttc}
 \setCJKsansfont{simhei.ttf}
@@ -93,7 +98,7 @@
 
 \renewcommand{\maketitle}{
 
-    % PDF Metadata
+    % PDF Metadata - hyperref宏包的相关
     \hypersetup{
         pdftitle={\xmu@title},
         pdfsubject={厦门大学本科毕业论文（设计）},
@@ -103,21 +108,21 @@
     \clearpage
 
     % 封面
-    \thispagestyle{empty}
-    \vspace*{20pt}
-    \begin{center}
-        \includegraphics[width=208pt]{xmu-logo-text.jpg}
-        \vskip 3em
+    \thispagestyle{empty} % 设置页脚页眉为空
+    \begin{center} % 文本居中
+        \includegraphics[width=5.79cm]{xmu-logo-text-revised.jpg} % 设置校徽
+        \vskip 44bp % 关于字号磅数用pt还是bp的讨论：https://github.com/ustctug/ustcthesis/issues/4
         \ifthenelse{\isundefined{\xmu@design}}{
-            \bf\songti\zihao{-2} 本\quad 科\quad 毕\quad 业\quad 论\quad 文
+            \bf\songti\zihao{-2} 本\hspace{1.1em}科\hspace{1.1em}毕\hspace{1.1em}业\hspace{1.1em}论\hspace{1.1em}文\\
         }{
-            \bf\songti\zihao{-2} 本\quad 科\quad 毕\quad 业\quad 设\quad 计
+            \bf\songti\zihao{-2} 本\hspace{1.1em}科\hspace{1.1em}毕\hspace{1.1em}业\hspace{1.1em}设\hspace{1.1em}计\\
         }
         \ifthenelse{\isundefined{\xmu@minor}}{}{
-            \vskip 1ex
-            \bf\songti\zihao{3} （辅\quad 修）
+            \bf\songti\zihao{3} （辅\quad 修）\\
+        }{
+            \bf\songti\zihao{3}（主修专业）\\
         }
-        \vskip 2em
+        \vskip 16bp
         \sf\zihao{2}\mdseries\xmu@title
         \vskip 1ex
         \bf\zihao{3}\xmu@entitle

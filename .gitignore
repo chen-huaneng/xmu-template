@@ -21,6 +21,8 @@
 *.snm
 *.nav
 *.vrb
+*.xdv
+*.entoc
 
 # 忽略临时文件
 *~
