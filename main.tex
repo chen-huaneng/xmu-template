@@ -1,0 +1,98 @@
+%!TEX program = xelatex
+\documentclass{xmu}
+
+\begin{document}
+
+% 电子版 / 打印版（取消注释下一行即为打印版）
+\print
+% 取消注释后，将在某些偶数页产生空白页，使得下一部分的内容从奇数页开始
+
+% 取消注释后，仅使用数字作为章的编号
+% \arabicchapter
+
+% 毕业设计 / 毕业论文（取消注释下一行即为毕业设计）
+% \design
+
+% 主修 / 辅修（取消注释下一行即为辅修）
+% \minor
+
+% 标题
+\title{}
+{}
+
+% 姓名
+\author{}
+
+% 学号
+\idn{}
+
+% 学院
+\college{}
+
+% 专业
+\subject{}
+
+% 年级
+\grade{}
+
+% 校内指导教师
+\teacher{}
+
+% 校外指导教师（注释则不显示）
+\otherteacher{}
+
+% 完成时间
+\pubdate{\today}
+
+% 关键词
+\keywords{}
+{}
+
+% 生成封面、承诺书
+\maketitle
+
+% 如果想要将致谢放在最前，可将最后的致谢移动至此
+
+%%%%%%%% 摘要 %%%%%%%%
+
+% 中文摘要
+\begin{abstract}
+
+\end{abstract}
+
+% 英文摘要
+\begin{enabstract}
+
+\end{enabstract}
+
+% 生成中英文目录
+\tableofcontents
+
+%%%%%%%% 正文 %%%%%%%%
+
+\input{chapter/chapter1.tex}
+
+\input{chapter/chapter2.tex}
+
+%%%%%%%% 参考文献 %%%%%%%%
+
+\begin{reference}
+    % 如果需要使用 bib 文件导入参考文献，则取消注释下一行
+    % \bibliography{references.bib}
+    % bib 文件可以通过百度学术、Google Scholar 的引用界面自动生成
+    % 已自动按照 GB/T 7714-2005 设置参考文献的引用格式
+\end{reference}
+
+%%%%%%%% 附录 %%%%%%%%
+
+\begin{appendix}
+
+\end{appendix}
+
+%%%%%%%% 致谢（默认在最后） %%%%%%%%
+
+\begin{acknowledgement}
+
+\end{acknowledgement}
+
+\end{document}
