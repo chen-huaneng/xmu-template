@@ -17,41 +17,48 @@
 % \minor
 
 % 标题
-\title{}
-{}
+\title{厦门大学本科毕业论文 \LaTeX 模板}
+{XMU Thesis Template by \LaTeX}
 
 % 姓名
-\author{}
+\author{Abel}
 
 % 学号
-\idn{}
+\idn{XXXXXXXXXXXXXXXXXX}
 
 % 学院
-\college{}
+\college{XX学院}
 
 % 专业
-\subject{}
+\subject{XXXX}
 
 % 年级
-\grade{}
+\grade{20XX级}
 
 % 校内指导教师
-\teacher{}
+\teacher{XXX\; 教授}
 
 % 校外指导教师（注释则不显示）
-\otherteacher{}
+\otherteacher{XXX\; （职位）}
 
 % 完成时间
-\pubdate{\today}
+\pubdate{二〇XX年X月XX日}
 
-% 关键词
-\keywords{}
-{}
+%%%%%%%% 关键词 %%%%%%%%
+\keywords{XXX；XXX；XXX}
+{XXXX; XXXX; XXXX}
+
+%%%%%%%% 承诺书 %%%%%%%%
 
 % 生成封面、承诺书
 \maketitle
 
-% 如果想要将致谢放在最前，可将最后的致谢移动至此
+%%%%%%%% 致谢 %%%%%%%%
+
+\begin{acknowledgement}
+感谢互联网的开源精神，感谢每一个无私分享知识的陌生人，其中特别感谢 \href{https://github.com/chen-huaneng/xmu-template}{chen-huaneng/xmu-template} 项目提供的 \LaTeX 基础模板让我省去了很多排版中细枝末节的重复劳动。
+
+\end{acknowledgement}
 
 %%%%%%%% 摘要 %%%%%%%%
 
@@ -65,14 +72,13 @@
 
 \end{enabstract}
 
+%%%%%%%% 目录 %%%%%%%%
+
 % 生成中英文目录
 \tableofcontents
 
 %%%%%%%% 正文 %%%%%%%%
-
-\input{chapter/chapter1.tex}
-
-\input{chapter/chapter2.tex}
+这里输入正文。
 
 %%%%%%%% 参考文献 %%%%%%%%
 
@@ -84,15 +90,9 @@
 \end{reference}
 
 %%%%%%%% 附录 %%%%%%%%
-
 \begin{appendix}
+这里输入附录的内容。
 
 \end{appendix}
-
-%%%%%%%% 致谢（默认在最后） %%%%%%%%
-
-\begin{acknowledgement}
-
-\end{acknowledgement}
 
 \end{document}

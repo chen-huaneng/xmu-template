@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{xmu}[2024-12-04 XMU Undergraduates Thesis Template]
+\ProvidesClass{xmu}[2025-02-19 XMU Undergraduates Thesis Template]
 
 \PassOptionsToPackage{AutoFakeBold}{xeCJK}
 \LoadClass{ctexbook}
@@ -19,8 +19,12 @@
 \RequirePackage{graphicx}
 \RequirePackage{caption}
 \RequirePackage{etoolbox}
+\RequirePackage{subcaption}
+% 列表
+\RequirePackage{enumitem}
 % 表格线
 \RequirePackage{booktabs}
+\RequirePackage{tabularx}
 % 数学公式
 \RequirePackage{array}
 \RequirePackage{amsmath}
@@ -34,7 +38,7 @@
 % 自定义脚注
 \RequirePackage{scrextend}
 % 自定义参考文献
-\RequirePackage[square,super,comma,sort,compress]{natbib}
+\RequirePackage[sort&compress]{gbt7714} % 对引用的编号进行自动排序
 % 引用、超链接
 \RequirePackage[colorlinks,citecolor=black,linkcolor=black,urlcolor=black,bookmarksnumbered=true,bookmarksopen=true]{hyperref}
 % 条件编译
@@ -126,7 +130,7 @@
         \sf\zihao{2}\mdseries\xmu@title
         \vskip 1ex
         \bf\zihao{3}\xmu@entitle
-        \vskip 2em
+        \vskip 50bp
         \rm\zihao{4}\mdseries
         \renewcommand\arraystretch{1.2}
         \begin{tabular}{rl}
@@ -407,7 +411,7 @@
     \clearpage
 }
 
-\bibliographystyle{gbt7714-2005.bst}  % 参考文献格式 GB/T 7714-2005
+\bibliographystyle{gbt7714-2005-author-year} % 参考文献格式 GB/T 7714-2005
 \renewcommand{\bibfont}{\rm\zihao{5}} % 参考文献字体
 \renewcommand{\bibsep}{0.5ex}         % 参考文献之间的间距
 
