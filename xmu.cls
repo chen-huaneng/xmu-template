@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{xmu}[2025-02-19 XMU Undergraduates Thesis Template]
+\ProvidesClass{xmu}[2025-05-07 XMU Undergraduates Thesis Template]
 
 \PassOptionsToPackage{AutoFakeBold}{xeCJK}
 \LoadClass{ctexbook}
@@ -22,9 +22,12 @@
 \RequirePackage{subcaption}
 % 列表
 \RequirePackage{enumitem}
-% 表格线
+% 表格
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
+\RequirePackage{ltablex} % 跨页表格
+% \RequirePackage{rotating} % 旋转表格
+\RequirePackage{threeparttable} % 三线表
 % 数学公式
 \RequirePackage{array}
 \RequirePackage{amsmath}
@@ -32,15 +35,18 @@
 \RequirePackage{mathptmx}
 \RequirePackage{bm}
 % 绘图
-\RequirePackage{pgfplots}
+% \RequirePackage{pgfplots}
 % 算法
-\RequirePackage[ruled]{algorithm2e}
+\RequirePackage[linesnumbered, ruled, longend, lined]{algorithm2e}
 % 自定义脚注
 \RequirePackage{scrextend}
+\RequirePackage{pifont} % 圆圈数字
+\RequirePackage[perpage]{footmisc} % 每页脚注编号从1开始
 % 自定义参考文献
 \RequirePackage[sort&compress]{gbt7714} % 对引用的编号进行自动排序
 % 引用、超链接
 \RequirePackage[colorlinks,citecolor=black,linkcolor=black,urlcolor=black,bookmarksnumbered=true,bookmarksopen=true]{hyperref}
+\RequirePackage{cleveref} % 单次多个引用
 % 条件编译
 \RequirePackage{ifthen}
 
@@ -61,28 +67,55 @@
 \newcommand{\pubdate}[1]{\def\xmu@pubdate{#1}}                          % 日期
 \newcommand{\keywords}[2]{\def\xmu@keywords{#1}\def\xmu@enkeywords{#2}} % 关键字
 
+% 保存原始的无编号章节标题样式
+\let\old@makeschapterhead\@makeschapterhead
+
+% 定义新的居中样式
+\def\centered@makeschapterhead#1{%
+  {\parindent \z@ \centering \normalfont
+    \heiti\zihao{-3} #1\par\nobreak
+    \vskip 30pt}%
+}
+
+% 在致谢、摘要环境中应用居中标题
+\AtBeginEnvironment{acknowledgement}{\let\@makeschapterhead\centered@makeschapterhead}
+\AtBeginEnvironment{abstract}{\let\@makeschapterhead\centered@makeschapterhead}
+\AtBeginEnvironment{enabstract}{\let\@makeschapterhead\centered@makeschapterhead}
+
+% 恢复原始样式
+\AtEndEnvironment{acknowledgement}{\let\@makeschapterhead\old@makeschapterhead}
+\AtEndEnvironment{abstract}{\let\@makeschapterhead\old@makeschapterhead}
+\AtEndEnvironment{enabstract}{\let\@makeschapterhead\old@makeschapterhead}
+
+% 定义罗马数字部分的空白页样式
+\fancypagestyle{romanplain}{
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyfoot[C]{\rm\zihao{-5}\thepage} % 统一页脚字号
+}
+
 %%%%%%%% 字体、段落 %%%%%%%%
 
 % 设置粗体的粗细程度
 \xeCJKsetup{EmboldenFactor=3}
 
 % 采用 Windows 字体文件以兼容 macOS 和 Linux
-\setCJKfamilyfont{simsun}{simsun.ttc}
-\setCJKfamilyfont{simhei}{simhei.ttf}
-\setCJKfamilyfont{simkai}{simkai.ttf}
+% \setCJKfamilyfont{simsun}{simsun.ttc}
+% \setCJKfamilyfont{simhei}{simhei.ttf}
+% \setCJKfamilyfont{simkai}{simkai.ttf}
 
 % 定义新的字体调用命令
-\renewcommand{\songti}{\CJKfamily{simsun}} % 宋体
-\renewcommand{\heiti}{\CJKfamily{simhei}}  % 黑体
-\renewcommand{\kaishu}{\CJKfamily{simkai}} % 楷体
+% \renewcommand{\songti}{\CJKfamily{simsun}} % 宋体
+% \renewcommand{\heiti}{\CJKfamily{simhei}}  % 黑体
+% \renewcommand{\kaishu}{\CJKfamily{simkai}} % 楷体
 
 % 英文默认字体
 \setmainfont{Times New Roman}
 \setsansfont{Arial}
 
 % 中文默认字体
-\setCJKmainfont[BoldFont=simhei.ttf,ItalicFont=simkai.ttf]{simsun.ttc}
-\setCJKsansfont{simhei.ttf}
+% \setCJKmainfont[BoldFont=simhei.ttf,ItalicFont=simkai.ttf]{simsun.ttc}
+% \setCJKsansfont{simhei.ttf}
 % 这样设置之后，针对不同的中英字体效果如下：
 % \rm：中文宋体，英文 Times New Roman
 % \sf：中文黑体，英文 Arial
@@ -121,13 +154,14 @@
         }{
             \bf\songti\zihao{-2} 本\hspace{1.1em}科\hspace{1.1em}毕\hspace{1.1em}业\hspace{1.1em}设\hspace{1.1em}计\\
         }
+        \vskip 1bp
         \ifthenelse{\isundefined{\xmu@minor}}{}{
             \bf\songti\zihao{3} （辅\quad 修）\\
         }{
             \bf\songti\zihao{3}（主修专业）\\
         }
         \vskip 16bp
-        \sf\zihao{2}\mdseries\xmu@title
+        \heiti \zihao{2}\mdseries\xmu@title
         \vskip 1ex
         \bf\zihao{3}\xmu@entitle
         \vskip 50bp
@@ -151,10 +185,13 @@
     \ifthenelse{\isundefined{\xmu@print}}{}{\cleardoublepage}
 
     % 诚信承诺书
-    \pagestyle{empty}
+    % 定义目录前的页码格式为罗马字母
+    \pagestyle{romanplain}      % 启用页眉页脚控制
+    \pagenumbering{Roman}
+    \setcounter{page}{1}
     \vspace*{1em}
     \begin{center}
-        \sf\zihao{-2}厦门大学本科学位论文诚信承诺书
+        \heiti \zihao{-2}厦门大学本科学位论文诚信承诺书
     \end{center}
     \vspace{3em}
     {
@@ -174,18 +211,52 @@
         \par
     }
     \clearpage
-    \ifthenelse{\isundefined{\xmu@print}}{}{\cleardoublepage}
+    % \ifthenelse{\isundefined{\xmu@print}}{}{\cleardoublepage}
+    \ifthenelse{\isundefined{\xmu@print}}{}{
+        \thispagestyle{romanplain} % 使用专用样式
+        \cleardoublepage
+    }
 
-    % 定义目录前的页码格式为罗马字母
-    \pagenumbering{Roman}
     % 正文字号
     \zihao{-4}
+}
+
+%%%%%%%% 致谢 %%%%%%%%
+
+\newenvironment{acknowledgement}{
+    \chapter*{\zihao{-3}\heiti 致\quad\; 谢}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \thispagestyle{romanplain} % 设置页眉页脚
+    \ifthenelse{\isundefined{\xmu@entoc}}{
+        % 如果致谢在目录前，则只设置页脚
+        \renewcommand{\headrulewidth}{0pt}
+        \fancyfoot[C]{\rm\zihao{-5}\thepage}
+    }{
+        % 如果致谢在目录后，设置页眉、页脚，并添加索引到目录
+        \renewcommand{\headrulewidth}{0.4pt}
+        \fancyhead[OC]{\rm\zihao{-5}致\quad\; 谢}
+        \fancyhead[EC]{\rm\zihao{-5}\xmu@title}
+        \fancyfoot[C]{\rm\zihao{-5}\thepage}
+        \addcontentsline{toc}{chapter}{致谢}
+        \addcontentsline{entoc}{chapter}{Acknowledgements}
+    }
+    \vspace{1em}
+}{
+    \par
+    \clearpage
+    \ifthenelse{\isundefined{\xmu@print}}{}{
+        \thispagestyle{romanplain} % 使用专用样式
+        \cleardoublepage
+    }
 }
 
 %%%%%%%% 摘要 %%%%%%%%
 
 % 中文摘要
 \newenvironment{abstract}{
+    \cleardoublepage % 强制从奇数页开始
+    \thispagestyle{romanplain} % 设置页眉页脚
     \chapter*{摘\quad\; 要}
     \pagestyle{fancy}
     \fancyhf{}
@@ -197,13 +268,19 @@
     \par
     \vspace{1em}
     \noindent
-    {\sf\zihao{-4}关键词：}\xmu@keywords
+    {\heiti \zihao{-4}关键词：}\xmu@keywords
     \def\xmu@inabstract{true}
     \clearpage
+    \ifthenelse{\isundefined{\xmu@print}}{}{
+        \thispagestyle{romanplain} % 使用专用样式
+        \cleardoublepage
+    }
 }
 
 % 英文摘要
 \newenvironment{enabstract}{
+    \cleardoublepage % 强制从奇数页开始
+    \thispagestyle{romanplain} % 设置页眉页脚
     \let\xmu@inabstract\relax
     \chapter*{\bf Abstract}
     \pagestyle{fancy}
@@ -218,7 +295,11 @@
     \noindent
     {\bf\zihao{-4}Key Words: }\xmu@enkeywords
     \clearpage
-    \ifthenelse{\isundefined{\xmu@print}}{}{\cleardoublepage}
+    % \ifthenelse{\isundefined{\xmu@print}}{}{\cleardoublepage}
+    \ifthenelse{\isundefined{\xmu@print}}{}{
+        \thispagestyle{romanplain} % 使用专用样式
+        \cleardoublepage
+    }
 }
 
 %%%%%%%% 目录 %%%%%%%%
@@ -244,7 +325,7 @@
 
     % 中文目录
     \begin{center}
-        \sf\zihao{-3}目\quad\; 录
+        \heiti \zihao{-3}目\quad\; 录
     \end{center}
     \vspace{1em}
     % 中文目录页脚
@@ -276,6 +357,14 @@
 
     % 定义目录后的页码格式为阿拉伯数字
     \pagenumbering{arabic}
+
+    % 确保后续空白页应用正文页眉页脚
+    \pagestyle{fancy}
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \fancyhead[OC]{\rm\zihao{-5}\leftmark}  % 奇数页眉
+    \fancyhead[EC]{\rm\zihao{-5}\xmu@title} % 偶数页眉
+    \fancyfoot[C]{\rm\zihao{-5}\thepage}    % 页脚
 }
 
 % 定义英文目录相关指令
@@ -309,13 +398,13 @@
 % 目录字体
 % 一级标题
 \titlecontents{chapter}[0pt]
-{\ifthenelse{\isundefined{\xmu@entoc}}{\sf}{\bf}\zihao{4}}
+{\ifthenelse{\isundefined{\xmu@entoc}}{\heiti}{\bf}\zihao{4}}
 {\thecontentslabel\;}
 {}
 {\,\titlerule*{.}\contentspage}
 % 二级标题
 \titlecontents{section}[1\ccwd]
-{\ifthenelse{\isundefined{\xmu@entoc}}{\sf}{\bf}\zihao{-4}}
+{\ifthenelse{\isundefined{\xmu@entoc}}{\heiti}{\bf}\zihao{-4}}
 {\ifthenelse{\isundefined{\xmu@entoc}}{\thecontentslabel\;\;}{\thecontentslabel\;}}
 {}
 {\,\titlerule*{.}\contentspage}
@@ -332,9 +421,9 @@
 \setcounter{secnumdepth}{3}
 
 % 章节标题字体
-\titleformat{\chapter}{\centering\sf\zihao{-3}}{\ifthenelse{\isundefined{\xmu@arabicchapter}}{第\zhnumber{\thechapter} 章}{\thechapter}}{1em}{}
-\titleformat{\section}{\sf\zihao{4}}{\thesection}{0.5em}{}
-\titleformat{\subsection}{\sf\zihao{-4}}{\thesubsection}{0.5em}{}
+\titleformat{\chapter}{\heiti\zihao{-3}}{\ifthenelse{\isundefined{\xmu@arabicchapter}}{第\zhnumber{\thechapter} 章}{\thechapter}}{1em}{}
+\titleformat{\section}{\heiti\zihao{4}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\heiti\zihao{-4}}{\thesubsection}{0.5em}{}
 \titleformat{\subsubsection}{\rm\zihao{-4}}{\thesubsubsection}{0.5em}{}
 
 % 章节标题行间距
@@ -347,7 +436,7 @@
 \renewcommand{\chapter}{
     \clearpage
     \ifthenelse{\isundefined{\xmu@inabstract}}{
-        \ifthenelse{\isundefined{\xmu@print}}{}{\cleardoublepage}
+        \ifthenelse{\isundefined{\xmu@print}}{}{\thispagestyle{fancy}\cleardoublepage}
     }{}
     \pagestyle{fancy}
     \fancyhf{}
@@ -371,23 +460,35 @@
 \DeclareCaptionFont{simsun5bf}{\bf\songti\zihao{5}}
 \captionsetup[figure]{font=simsun5bf}
 \captionsetup[table]{position=top,belowskip=2ex,font=simsun5bf}
+\captionsetup[tabularx]{position=top,belowskip=2ex,font=simsun5bf}
+% \captionsetup[tabular]{position=top,belowskip=2ex,font=simsun5bf}
 \AtBeginEnvironment{figure}{\zihao{5}}
 \AtBeginEnvironment{table}{\zihao{5}}
+\AtBeginEnvironment{tabularx}{\zihao{5}}
+% \AtBeginEnvironment{tabular}{\zihao{5}}
 % 代码、算法字体
 \AtBeginEnvironment{verbatim}{\par\renewcommand{\baselinestretch}{1.2}\zihao{5}}
 \AtBeginEnvironment{algorithm}{\par\renewcommand{\baselinestretch}{1.2}\zihao{5}}
 % 算法行距
 \AtEndEnvironment{algorithm}{\vspace*{-0.5ex}}
-\renewcommand{\interspacetitleruled}{1ex}
+\renewcommand{\interspacetitleruled}{1ex} % 算法标题和横线间距
 \SetAlgoInsideSkip{smallskip}
 \renewcommand{\algorithmcfname}{\quad\bf\songti 算法}
-\renewcommand{\algomargin}{2em}
+\setlength{\algomargin}{2em} % 设置算法缩进使得行号在线框内
+%算法设置
+\DontPrintSemicolon % 不打印分号
+% 公式编号
+\crefname{equation}{}{} % 设置非首字母大写的引用格式
+\Crefname{equation}{}{} % 设置首字母大写的引用格式
+\crefrangeformat{equation}{(#3#1#4)-(#5#2#6)}
 
 %%%%%%%% 脚注 %%%%%%%%
 
 % 脚注字体
-\renewcommand{\thefootnote}{\textcircled{\rm\zihao{7}\arabic{footnote}}\;}
-\renewcommand{\thempfootnote}{\textcircled{\rm\zihao{7}\arabic{mpfootnote}}\;}
+\renewcommand{\thefootnote}{\ding{\numexpr171+\value{footnote}}}
+\renewcommand{\thempfootnote}{\ding{\numexpr171+\value{mpfootnote}}}
+% \renewcommand{\thefootnote}{\textcircled{\rm\zihao{7}\arabic{footnote}}\;}
+% \renewcommand{\thempfootnote}{\textcircled{\rm\zihao{7}\arabic{mpfootnote}}\;}
 \renewcommand{\footnotesize}{\renewcommand{\baselinestretch}{1.15}\rm\zihao{-5}}
 % 脚注线
 \renewcommand{\footnoterule}{\vspace{1em}\hrule width 0.4\columnwidth height 0.4pt\vspace{0.3em}}
@@ -411,7 +512,7 @@
     \clearpage
 }
 
-\bibliographystyle{gbt7714-2005-author-year} % 参考文献格式 GB/T 7714-2005
+\bibliographystyle{gbt7714-2005-numerical} % 参考文献格式 GB/T 7714-2005
 \renewcommand{\bibfont}{\rm\zihao{5}} % 参考文献字体
 \renewcommand{\bibsep}{0.5ex}         % 参考文献之间的间距
 
@@ -444,31 +545,6 @@
     \setcounter{section}{0}
     \setcounter{subsection}{0}
     \setcounter{subsubsection}{0}
-}{
-    \par
-    \clearpage
-}
-
-%%%%%%%% 致谢 %%%%%%%%
-
-\newenvironment{acknowledgement}{
-    \chapter*{致\quad\; 谢}
-    \pagestyle{fancy}
-    \fancyhf{}
-    \ifthenelse{\isundefined{\xmu@entoc}}{
-        % 如果致谢在目录前，则只设置页脚
-        \renewcommand{\headrulewidth}{0pt}
-        \fancyfoot[C]{\rm\zihao{-5}\thepage}
-    }{
-        % 如果致谢在目录后，设置页眉、页脚，并添加索引到目录
-        \renewcommand{\headrulewidth}{0.4pt}
-        \fancyhead[OC]{\rm\zihao{-5}致\quad\; 谢}
-        \fancyhead[EC]{\rm\zihao{-5}\xmu@title}
-        \fancyfoot[C]{\rm\zihao{-5}\thepage}
-        \addcontentsline{toc}{chapter}{致谢}
-        \addcontentsline{entoc}{chapter}{Acknowledgements}
-    }
-    \vspace{1em}
 }{
     \par
     \clearpage

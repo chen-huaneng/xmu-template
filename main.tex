@@ -8,7 +8,9 @@
 % 取消注释后，将在某些偶数页产生空白页，使得下一部分的内容从奇数页开始
 
 % 取消注释后，仅使用数字作为章的编号
-% \arabicchapter
+\arabicchapter
+
+%%%%%%%% 封面 %%%%%%%%
 
 % 毕业设计 / 毕业论文（取消注释下一行即为毕业设计）
 % \design
@@ -53,23 +55,20 @@
 % 生成封面、承诺书
 \maketitle
 
-%%%%%%%% 致谢 %%%%%%%%
+%%%%%%%% 致谢（默认在最后） %%%%%%%%
+% 如果想要将致谢放在最前，可将最后的致谢移动至此
 
 \begin{acknowledgement}
-感谢互联网的开源精神，感谢每一个无私分享知识的陌生人，其中特别感谢 \href{https://github.com/chen-huaneng/xmu-template}{chen-huaneng/xmu-template} 项目提供的 \LaTeX 基础模板让我省去了很多排版中细枝末节的重复劳动。
-
 \end{acknowledgement}
 
 %%%%%%%% 摘要 %%%%%%%%
 
 % 中文摘要
 \begin{abstract}
-
 \end{abstract}
 
 % 英文摘要
 \begin{enabstract}
-
 \end{enabstract}
 
 %%%%%%%% 目录 %%%%%%%%
@@ -78,7 +77,24 @@
 \tableofcontents
 
 %%%%%%%% 正文 %%%%%%%%
-这里输入正文。
+
+% 绪论
+\input{chapter/chapter1.tex}
+
+% 相关概念与理论基础以及文献综述
+\input{chapter/chapter2.tex}
+
+% 问题建模
+\input{chapter/chapter3.tex}
+
+% 算法求解
+\input{chapter/chapter4.tex}
+
+% 算例分析和案例分析
+\input{chapter/chapter5.tex}
+
+% 总结与展望
+\input{chapter/chapter6.tex}
 
 %%%%%%%% 参考文献 %%%%%%%%
 
@@ -90,9 +106,7 @@
 \end{reference}
 
 %%%%%%%% 附录 %%%%%%%%
-\begin{appendix}
-这里输入附录的内容。
 
-\end{appendix}
+\input{chapter/appendix.tex}
 
 \end{document}
